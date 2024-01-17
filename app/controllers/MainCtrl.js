@@ -41,6 +41,7 @@
 
         $scope.addToFavorites = function (book) {
             BooksService.AddToFavorites(book);
+            // using this method is better for repeater than using template function 
             book.isFav = true;
             $scope.favorites.push(book.id);
         };
