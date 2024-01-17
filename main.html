@@ -1,0 +1,84 @@
+<div ng-init="initBooks()">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="mdi mdi-home"></i></a>
+            <div>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item" ng-if="favorites.length">
+                        <a class="nav-link" href="#!/Favorites">Favorites</a>
+                    </li>
+                    <li class="nav-item" >
+                        <a class="nav-link" ng-click="logout()">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="body container-fluid">
+        <div class="container mt-5">
+            <h2>Book List</h2>
+            <div class="card card-body mb-5">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search" ng-model="search.name" ng-change="searchBooks()">
+                    <button class="btn btn-outline-secondary" type="button" id="search" ng-click="fetchBooks()">Search</button>
+                </div>
+            </div>
+            <!-- todo this can be a directive for both pages-->
+            <div ng-if="!books.length">No books found for {{search.name}}</div>
+            <div class="row justify-content-center row-cols-1 row-cols-md-4 g-4">
+                <div ng-repeat="book in books" class="col">
+                    <div class="card h-100">
+                        <img ng-src="{{book.volumeInfo.imageLinks.thumbnail}}"
+                             ng-if="book.volumeInfo.imageLinks.thumbnail" class="img-fluid"
+                             alt="{{ book.volumeInfo.title }}">
+                        <div class="card-body">
+                            <button type="button" class="btn btn-link" ng-click="togglFav(book,$index)"><span class="mdi " ng-class="book.isFav?'mdi-heart':'mdi-heart-outline'"></span></button>
+
+                            <div class="card-title">{{ book.volumeInfo.title|limitTo:20 }}</div>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ book.volumeInfo.authors.join(', ')|limitTo:20  }}</h6>
+                            <p class="card-text" style="max-height:100px;overflow:auto">
+                                {{ book.volumeInfo.description|limitTo:30 }}
+                            </p>
+                            <button type="button" ng-click="showMore(book)" class="btn btn-link">Show more</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="justify-content-center">
+                <app-paging ng-if="totalItems" total-items="totalItems"
+                            current-page="search.currentPage" paging-size="itemsPerPage" noofitem="4" on-change="pageChanged(page)"></app-paging>
+
+            </div>
+        </div>
+        <div class="modal fade" id="bookModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">{{ book.volumeInfo.title|limitTo:20 }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card">
+                            <img ng-src="{{book.volumeInfo.imageLinks.thumbnail}}"
+                                 ng-if="book.volumeInfo.imageLinks.thumbnail" class="img-fluid"
+                                 style="max-width: 150px;"
+                                 alt="{{ book.volumeInfo.title }}">
+                            <div class="card-body">
+                                <h5 class="mb-2 text-muted">Authors: {{ book.volumeInfo.authors.join(', ')  }}</h5>
+                                <p>Categories: {{book.volumeInfo.categories.join(', ')}}</p>
+                                <p>Avarage score: {{book.volumeInfo.averageRating}}, Pages:{{book.volumeInfo.pageCount}}</p>
+                                <p class="card-text" style="max-height:400px;overflow:auto">
+                                    {{ book.volumeInfo.description }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

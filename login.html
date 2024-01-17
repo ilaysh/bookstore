@@ -1,0 +1,26 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h2>Bookstore Login</h2>
+        </div>
+        <div class="card-body">
+            <form name="loginForm" class="needs-validation" novalidate ng-submit="login()" ng-class="{'was-validated':loginForm.$submitted}">
+                <div class="mb-3 form-floating">
+                    <input type="text" class="form-control" ng-model="user.username" required placeholder="Username">
+                    <label for="username">Username</label>
+                    <div class="invalid-feedback">
+                        Please enter username
+                    </div>
+                </div>
+                <div class="mb-3 form-floating">
+                    <input type="password" class="form-control" ng-model="user.password" required placeholder="Password">
+                    <label for="password">Password</label>
+                    <div class="invalid-feedback">
+                        Please enter password
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
